@@ -70,6 +70,7 @@ public:
 	/// Busca un nodo en el árbol de manera iterativa
 	/// </summary>
 	/// <param name="data">Dato del nodo a buscar</param>
+	/// <returns>Nodo encontrado</returns>
 	Node* search_iterative(int);
 	/// <summary>
 	/// Elimina un nodo del árbol de manera iterativa
