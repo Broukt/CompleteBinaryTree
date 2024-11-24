@@ -29,3 +29,11 @@ void BinaryTree::postorder(Node* root, std::queue<int>* queue)
 	this->postorder(root->get_right(), queue);
 	queue->push(root->get_data());
 }
+
+BinaryTree::BinaryTree()
+	: root(nullptr), amount(0) {}
+
+BinaryTree::~BinaryTree()
+{
+	this->remove_all();
+}
