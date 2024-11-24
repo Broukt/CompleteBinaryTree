@@ -96,3 +96,24 @@ Node* BinaryTree::search_iterative(int data)
 
 	return nullptr;
 }
+
+std::queue<int>* BinaryTree::preorder_recursive()
+{
+	std::queue<int>* queue = new std::queue<int>();
+	this->preorder(this->root, queue);
+	return queue;
+}
+
+std::queue<int>* BinaryTree::inorder_recursive()
+{
+	std::queue<int>* queue = new std::queue<int>();
+	this->inorder(this->root, queue);
+	return queue;
+}
+
+std::queue<int>* BinaryTree::postorder_recursive()
+{
+	std::queue<int>* queue = new std::queue<int>();
+	this->postorder(this->root, queue);
+	return queue;
+}
