@@ -117,3 +117,92 @@ std::queue<int>* BinaryTree::postorder_recursive()
 	this->postorder(this->root, queue);
 	return queue;
 }
+
+std::queue<int>* BinaryTree::preorder_iterative()
+{
+	if (!this->root)
+		return nullptr;
+
+	std::queue<int>* preorder = new std::queue<int>();
+	std::stack<Node*> stack;
+	stack.push(this->root);
+	Node* aux;
+
+	while (!stack.empty())
+	{
+		aux = stack.top();
+		stack.pop();
+
+		preorder->push(aux->get_data());
+
+		if (aux->get_right())
+			stack.push(aux->get_right());
+		if (aux->get_left())
+			stack.push(aux->get_left());
+	}
+
+	return preorder;
+}
+
+std::queue<int>* BinaryTree::inorder_iterative()
+{
+	if (!this->root)
+		return nullptr;
+
+	std::queue<int>* inorder = new std::queue<int>();
+	std::stack<Node*> stack;
+	Node* aux = this->root;
+
+	while (true)
+	{
+		while (aux)
+		{
+			stack.push(aux);
+			aux = aux->get_left();
+		}
+
+		if (!stack.empty())
+		{
+			aux = stack.top();
+			stack.pop();
+			inorder->push(aux->get_data());
+			aux = aux->get_right();
+		}
+		else
+			break;
+	}
+
+	return inorder;
+}
+
+std::queue<int>* BinaryTree::postorder_iterative()
+{
+	if (!this->root)
+		return nullptr;
+
+	std::queue<int>* postorder = new std::queue<int>();
+	std::stack<Node*> aux_stack, reversed_stack;
+	aux_stack.push(this->root);
+	Node* aux;
+
+	while (!aux_stack.empty())
+	{
+		aux = aux_stack.top();
+		aux_stack.pop();
+		reversed_stack.push(aux);
+
+		if (aux->get_left())
+			aux_stack.push(aux->get_left());
+		if (aux->get_right())
+			aux_stack.push(aux->get_right());
+	}
+
+	while (!reversed_stack.empty())
+	{
+		aux = reversed_stack.top();
+		reversed_stack.pop();
+		postorder->push(aux->get_data());
+	}
+
+	return postorder;
+}
