@@ -37,3 +37,62 @@ BinaryTree::~BinaryTree()
 {
 	this->remove_all();
 }
+
+void BinaryTree::add_iterative(int data)
+{
+	if (this->root == nullptr)
+	{
+		this->root = new Node(data);
+		this->amount++;
+		return;
+	}
+
+	int iterations = (this->amount + 1) / 2;
+	std::queue<Node*> queue;
+	Node* aux = this->root;
+	queue.push(aux);
+
+	for (int i = 0; i < iterations; i++)
+	{
+		aux = queue.front();
+		queue.pop();
+
+		if (aux->get_left())
+			queue.push(aux->get_left());
+		if (aux->get_right())
+			queue.push(aux->get_right());
+	}
+
+	if (!aux->get_left())
+		aux->set_left(new Node(data));
+	else
+		aux->set_right(new Node(data));
+
+	this->amount++;
+}
+
+Node* BinaryTree::search_iterative(int data)
+{
+	if (this->root == nullptr)
+		return nullptr;
+
+	std::queue<Node*> queue;
+	queue.push(this->root);
+	Node* aux;
+
+	while (!queue.empty())
+	{
+		aux = queue.front();
+		queue.pop();
+
+		if (aux->get_data() == data)
+			return aux;
+
+		if (aux->get_left())
+			queue.push(aux->get_left());
+		if (aux->get_right())
+			queue.push(aux->get_right());
+	}
+
+	return nullptr;
+}
