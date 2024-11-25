@@ -3,6 +3,9 @@
 #include <stack>
 #include <queue>
 
+/// <summary>
+/// Entidad que representa un árbol binario
+/// </summary>
 class BinaryTree
 {
 private:
