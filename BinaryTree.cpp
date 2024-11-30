@@ -49,6 +49,11 @@ BinaryTree::~BinaryTree()
 	this->remove_all();
 }
 
+Node* BinaryTree::search_recursive(int data)
+{
+	return this->search(this->root, data);
+}
+
 void BinaryTree::add_iterative(int data)
 {
 	if (this->root == nullptr)
@@ -106,6 +111,53 @@ Node* BinaryTree::search_iterative(int data)
 	}
 
 	return nullptr;
+}
+
+void BinaryTree::remove_iterative(int data)
+{
+	if (this->root == nullptr)
+		return;
+
+	if (this->root->get_data() == data && this->amount == 1)
+	{
+		delete this->root;
+		this->root = nullptr;
+		this->amount--;
+		return;
+	}
+	
+	std::queue<Node*> queue;
+	queue.push(this->root);
+	Node* last = this->root, * last_parent = nullptr, * node_to_remove = nullptr;
+	int iterations = this->amount / 2;
+	int iterator = 0;
+
+	while (!queue.empty())
+	{
+		iterator++;
+		last = queue.front();
+		queue.pop();
+		if (iterator == iterations)
+			last_parent = last;
+		if (last->get_data() == data)
+			node_to_remove = last;
+		if (last->get_left())
+			queue.push(last->get_left());
+		if (last->get_right())
+			queue.push(last->get_right());
+	}
+
+	if (!node_to_remove)
+		return;
+
+	node_to_remove->set_data(last->get_data());
+	if (last_parent->get_left() == last)
+		last_parent->set_left(nullptr);
+	else
+		last_parent->set_right(nullptr);
+
+	delete last;
+	this->amount--;
 }
 
 std::queue<int>* BinaryTree::preorder_recursive()
@@ -217,3 +269,66 @@ std::queue<int>* BinaryTree::postorder_iterative()
 
 	return postorder;
 }
+
+void BinaryTree::remove_all()
+{
+	if (!this->root)
+		return;
+	std::queue<Node*> queue;
+	queue.push(this->root);
+	Node* aux;
+	while (!queue.empty())
+	{
+		aux = queue.front();
+		queue.pop();
+		if (aux->get_left())
+			queue.push(aux->get_left());
+		if (aux->get_right())
+			queue.push(aux->get_right());
+		delete aux;
+	}
+	this->root = nullptr;
+	this->amount = 0;
+}
+
+bool BinaryTree::is_perfect()
+{
+	if (!this->root)
+		return false;
+	if (!this->root->get_left() && !this->root->get_right())
+		return true;
+	std::queue<Node*> queue;
+	queue.push(this->root);
+	Node* aux;
+	int level = 0, expected_nodes_per_level, expected_nodes_added, nodes_added;
+
+	while (!queue.empty())
+	{
+		expected_nodes_per_level = 1 << level;
+		expected_nodes_added = 1 << (level + 1);
+		nodes_added = 0;
+		for (int i = 0; i < expected_nodes_per_level; i++)
+		{
+			aux = queue.front();
+			queue.pop();
+			if (aux->get_left())
+			{
+				queue.push(aux->get_left());
+				nodes_added++;
+			}
+			if (aux->get_right())
+			{
+				queue.push(aux->get_right());
+				nodes_added++;
+			}
+		}
+		if (nodes_added != expected_nodes_added)
+			return false;
+		level++;
+	}
+	return true;
+}
+
+int BinaryTree::get_amount() { return this->amount; }
+
+Node* BinaryTree::get_root() { return this->root; }
