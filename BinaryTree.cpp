@@ -1,5 +1,16 @@
 #include "BinaryTree.h"
 
+Node* BinaryTree::search(Node* root, int data)
+{
+	if (!root || root->get_data() == data)
+		return root;
+
+	Node* left = this->search(root->get_left(), data);
+	Node* right = this->search(root->get_right(), data);
+
+	return left ? left : right;
+}
+
 void BinaryTree::preorder(Node* root, std::queue<int>* queue)
 {
 	if (root == nullptr)
